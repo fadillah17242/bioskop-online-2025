@@ -23,15 +23,14 @@ class PemesananController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_pemesan' => 'required|string|max:255',
             'film_id' => 'required|exists:films,id',
+            'nama' => 'required|string',
             'jumlah_tiket' => 'required|integer|min:1',
-            'jadwal_tayang' => 'required|date',
             'kursi' => 'nullable|string',
         ]);
 
         Pemesanan::create($request->all());
 
-        return redirect()->route('pemesanans.index')->with('success', 'Pemesanan berhasil dibuat.');
+        return redirect()->route('pemesanans.index')->with('success', 'Pemesanan berhasil dibuat!');
     }
 }
