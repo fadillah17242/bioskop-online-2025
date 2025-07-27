@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class FilmController extends Controller
@@ -11,8 +12,8 @@ class FilmController extends Controller
     {
         $filmList = [
             ['judul' => 'Superman', 'genre' => 'Action'],
-            ['judul' => 'Barbie', 'genre' => 'Drama'],
-            ['judul' => 'Fast & Furious', 'genre' => 'Action'],
+            ['judul' => 'fantastic four', 'genre' => 'Action'],
+            ['judul' => 'Minecraft Movie', 'genre' => 'Comedy'],
         ];
 
         return response()->json($filmList);
@@ -70,9 +71,9 @@ class FilmController extends Controller
 
         $filmList = [
             'Superman',
-            'Barbie',
-            'Spiderman',
-            'Batman',
+            'Fantastic Four',
+            'Minecraft Movie',
+            
         ];
 
         $result = array_filter($filmList, function ($film) use ($keyword) {
@@ -89,11 +90,10 @@ class FilmController extends Controller
             'Film' => [
                 'Action' => [
                     'Superman',
-                    'Spiderman',
+                    'Fantastic Four',
                 ],
-                'Drama' => [
-                    'Barbie',
-                    'Titanic',
+                'Comedy' => [
+                    'Minecraft Movie'
                 ],
             ],
         ];

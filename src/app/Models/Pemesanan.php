@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Pemesanan extends Model
 {
@@ -11,8 +11,9 @@ class Pemesanan extends Model
 
     protected $fillable = [
         'film_id',
-        'nama',
+        'nama_pemesan',
         'jumlah_tiket',
+        'jadwal_tayang',
         'kursi',
     ];
 

@@ -41,7 +41,17 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->maxContentWidth(MaxWidth::SevenExtraLarge)
             ->sidebarCollapsibleOnDesktop()
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
+            ->discoverResources(
+                in: app_path('Filament/Admin/Resources'),
+                for: 'App\\Filament\\Admin\\Resources'
+            )
+            // 👇 Tambahan manual agar resource tetap muncul
+            ->resources([
+            \App\Filament\Admin\Resources\FilmResource::class,
+            \App\Filament\Admin\Resources\PemesananResource::class,
+            config('filament-logger.activity_resource'),
+            ])
+
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([
                 Pages\Dashboard::class,
@@ -52,17 +62,13 @@ class AdminPanelProvider extends PanelProvider
                 \Awcodes\Overlook\Widgets\OverlookWidget::class,
             ])
             ->navigationGroups([
-                NavigationGroup::make()
-                    ->label('Administration'),
+                NavigationGroup::make()->label('Administration'),
             ])
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->label(fn () => auth()->user()->name)
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle'),
-                // 'profile' => \Filament\Navigation\MenuItem::make()
-                //     ->label(fn () => auth()->user()->name)
-                //     ->icon('heroicon-m-user-circle'),
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make()
@@ -105,9 +111,6 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens(false)
                     ->shouldShowBrowserSessionsForm()
                     ->shouldShowAvatarForm(),
-            ])
-            ->resources([
-                config('filament-logger.activity_resource'),
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->middleware([

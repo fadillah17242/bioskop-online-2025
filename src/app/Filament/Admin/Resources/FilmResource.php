@@ -4,25 +4,26 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\FilmResource\Pages;
 use App\Models\Film;
+use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\DatePicker;
-use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Columns\ImageColumn; // <-- Tambahkan ini
+use Illuminate\Database\Eloquent\Builder;
 
 class FilmResource extends Resource
 {
     protected static ?string $model = Film::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Film';
-    protected static ?string $pluralModelLabel = 'Daftar Film';
-    protected static ?string $navigationGroup = 'Bioskop';
+    protected static ?string $navigationLabel = 'Daftar Film';
+    protected static ?string $navigationGroup = 'Pemesanan Tiket';
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -38,13 +39,12 @@ class FilmResource extends Resource
 
                 TextInput::make('poster')
                     ->url()
-                    ->label('Poster URL')
+                    ->label('Poster (URL)')
                     ->nullable(),
 
                 DatePicker::make('tanggal_tayang')
-    ->required() // <-- penting!
-    ->label('Tanggal Tayang')
-    ->native(false), // opsional biar date picker-nya pakai UI Filament
+                    ->label('Tanggal Tayang')
+                    ->required(),
             ]);
     }
 
@@ -52,33 +52,36 @@ class FilmResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('judul')->label('Judul')->searchable(),
-                TextColumn::make('deskripsi')->label('Deskripsi')->limit(50),
-                TextColumn::make('poster')
-    ->label('Poster')
-    ->formatStateUsing(fn ($state) => '<img src="' . $state . '" alt="Poster" style="height: 80px;">')
-    ->html(), // <--- penting agar HTML img bisa ditampilkan
+                ImageColumn::make('poster')
+                    ->label('Poster')
+                    ->circular() // bisa diganti dengan ->square()
+                    ->height(60),
 
-                TextColumn::make('tanggal_tayang')->label('Tanggal')->date(),
-            ])
-            ->filters([
-                //
+                TextColumn::make('judul')
+                    ->label('Judul')
+                    ->searchable(),
+
+                TextColumn::make('deskripsi')
+                    ->label('Deskripsi')
+                    ->limit(50),
+
+                TextColumn::make('tanggal_tayang')
+                    ->label('Tanggal')
+                    ->date(),
             ])
             ->actions([
-                EditAction::make(),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
